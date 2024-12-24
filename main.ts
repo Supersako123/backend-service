@@ -1,58 +1,50 @@
 
-import { PrismaClient } from '@prisma/client'
+import { fetchData } from './Services/api/functions';
+import { TResponse } from './lib/types';
+import { Insert } from './Services/database/functions';
 
-const prisma = new PrismaClient()
+const key = process.env.API_KEY;
 
-
-type TRelationships = {
-  group: {
-    id: string;
-    type: string;
-  };
-}
-
-type TDog = {
-  id: string;
-  type: string;
-  attributes: {
-    name: string;
-    description: string;
-    life: { max: number; min: number };
-    male_weight: { max: number; min: number };
-    female_weight: { max: number; min: number };
-    hypoallergenic: boolean;
-  };
-  relationship: TRelationships;
-}
-
-
-fetch("https://dogapi.dog/api/v2/breeds")
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`)
-    }
-    return (response.json());
-  })
-  .then(async data => {
-    const dogs = data.data.map((dog: TDog) => ({
-      id: dog.id,
-      name: dog.attributes.name,
-      description: dog.attributes.description,
-      lifeMin: dog.attributes.life.min,
-      lifeMax: dog.attributes.life.max,
-      weightMaleMin: dog.attributes.male_weight.min,
-      weightMaleMax: dog.attributes.male_weight.max,
-      weightFemaleMin: dog.attributes.female_weight.min,
-      weightFemaleMax: dog.attributes.female_weight.max,
-      hypoallergenic: dog.attributes.hypoallergenic,
-    }
-    ))
-
-    const createMany = await prisma.dog.createMany({
-      data: dogs,
-    })
-
+const cities = {
+  "Las Vegas": {
+    lat: 36.17,
+    lon: -115.17,
+  },
+  "New York": {
+    lat: 40.73,
+    lon: -73.93,
+  },
+  "Reno": {
+    lat: 39.53,
+    lon: -119.81,
   }
-  )
-  .catch(error => console.log(error));
+};
+
+
+
+async function main() {
+
+  console.log("Tracking weather in: ");
+  for (const city in cities) {
+    console.log(city);
+  };
+
+  const data: TResponse = await fetchData(`https://api.openweathermap.org/data/2.5/weather?lat=36.17&lon=-115.17&appid=${key}`);
+  await Insert(data);
+  console.log("Done. Weather will be tracked again in 1 minute");
+
+  setInterval(async () => {
+    console.log("Tracking weather in: ");
+    for (const city in cities) {
+      console.log(city);
+    };
+
+    const data: TResponse = await fetchData(`https://api.openweathermap.org/data/2.5/weather?lat=36.17&lon=-115.17&appid=${key}`);
+    await Insert(data);
+    console.log("Done. Weather will be tracked again in 1 minute");
+
+  }, 60000);
+}
+
+main();
 

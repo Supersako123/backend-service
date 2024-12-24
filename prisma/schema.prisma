@@ -10,16 +10,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Dog {
-  id          String   @id
-  name        String
-  description String
-  lifeMin Int
-  lifeMax Int
-  weightMaleMin   Int
-  weightMaleMax   Int
-  weightFemaleMax   Int
-  weightFemaleMin   Int
-  hypoallergenic Boolean
+model Weather {
+  id          Int @id @default(autoincrement())
+  name String
+  lon Float
+  lat Float
+  sky        String
+  temp Float
+  feels_like Float
+  temp_min Float
+  temp_max Float
+  pressure Int
+  humidity Int
+  sea_level Int
+  grnd_level Int
+  visibility Int
+  wind_speed Float
+  clouds Int
+  created_at DateTime @default(now())
 }
 
