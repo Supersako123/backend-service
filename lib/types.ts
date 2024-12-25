@@ -1,5 +1,5 @@
-export type TResponse = {
-  name: string
+export type TWeatherData = {
+  name: string;
   coord: { lon: number; lat: number; };
   weather: { main: string }[];
   main: {
@@ -15,4 +15,9 @@ export type TResponse = {
   visibility: number;
   wind: { speed: number };
   clouds: { all: number };
+}
+
+export type TBulkWeatherData = {
+  cnt: number;
+  list: TWeatherData[];
 }
