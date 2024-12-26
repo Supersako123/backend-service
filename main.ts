@@ -2,6 +2,7 @@
 import { fetchData } from './Services/api/functions';
 import { TBulkWeatherData, TWeatherData } from './lib/types';
 import { PrismaWeatherRepository } from './Services/WeatherService/PrismaWeatherRepository';
+import { functionLoop } from './lib/functions';
 
 const key = process.env.API_KEY;
 
@@ -19,31 +20,24 @@ const cities = {
 
 const cityIdstring = Object.values(cities).map(({ id }) => id).join(',');
 
-async function main() {
+function main() {
 
   const DB = new PrismaWeatherRepository;
 
-  console.log("Tracking weather in the following cities: ");
-  for (const city in cities) {
-    console.log(city);
-  };
-
-  const data: TBulkWeatherData = await fetchData(`https://api.openweathermap.org/data/2.5/group?id=${cityIdstring}&appid=${key}`);
-  await DB.insertMany(data);
-  console.log("Done. Weather will be tracked again in 1 minute");
-
-
-  setInterval(async () => {
+  functionLoop(async () => {
     console.log("Tracking weather in the following cities: ");
     for (const city in cities) {
       console.log(city);
     };
 
-    const data: TBulkWeatherData = await fetchData(`https://api.openweathermap.org/data/2.5/group?id=${cityIdstring}&appid=${key}`);
-    await DB.insertMany(data);
+    try {
+      const data: TBulkWeatherData = await fetchData(`https://api.openweathermap.org/data/2.5/group?id=${cityIdstring}&appid=${key}`);
+      await DB.insertMany(data);
+    } catch (error) {
+      console.log(`An Error occured: ${error}`)
+    }
     console.log("Done. Weather will be tracked again in 1 minute");
-
-  }, 60000);
+  }, 60000)
 }
 
 main();
