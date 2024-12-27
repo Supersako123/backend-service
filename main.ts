@@ -1,32 +1,25 @@
 
-import { fetchData } from './Services/api/functions';
-import { TBulkWeatherData, TWeatherData } from './lib/types';
-import { PrismaWeatherRepository } from './Services/WeatherService/PrismaWeatherRepository';
-import { functionLoop } from './lib/functions';
+import { fetchData } from './api/functions';
+import { TBulkWeatherData } from './lib/types';
+import { cityToString, functionLoop } from './lib/functions';
+import DB from './Services/WeatherService/WeatherServiceProvider';
 
 const key = process.env.API_KEY;
 
-const cities = {
-  "Las Vegas": {
-    id: 3606250,
-  },
-  "New York": {
-    id: 5128638,
-  },
-  "Washington D.C.": {
-    id: 4140963,
-  }
+const citiesById = {
+  "Las Vegas": 3606250,
+  "New York": 5128638,
+  "Washington D.C.": 4140963,
 };
 
-const cityIdstring = Object.values(cities).map(({ id }) => id).join(',');
 
 function main() {
 
-  const DB = new PrismaWeatherRepository;
+  const cityIdstring = cityToString(citiesById);
 
   functionLoop(async () => {
     console.log("Tracking weather in the following cities: ");
-    for (const city in cities) {
+    for (const city in citiesById) {
       console.log(city);
     };
 
