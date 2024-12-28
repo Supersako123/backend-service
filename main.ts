@@ -1,6 +1,6 @@
 
 import { fetchData } from './api/functions';
-import { TBulkWeatherData } from './lib/types';
+import { TBulkWeatherData, TReturnValue, TWeatherData } from './lib/types';
 import { cityToString, functionLoop } from './lib/functions';
 import DB from './Services/WeatherService/WeatherServiceProvider';
 
@@ -23,12 +23,16 @@ function main() {
       console.log(city);
     };
 
-    try {
-      const data: TBulkWeatherData = await fetchData(`https://api.openweathermap.org/data/2.5/group?id=${cityIdstring}&appid=${key}`);
-      await DB.insertMany(data);
-    } catch (error) {
-      console.log(`An Error occured: ${error}`)
+    const response = await fetchData<TBulkWeatherData>(`https://api.openweathermap.org/data/2.5/group?id=${cityIdstring}&appid=${key}`);
+
+    if ('error' in response) {
+      console.log(response.error.message)
+      response.error.status != 500 ? process.exit() : null; 
     }
+    else {
+      await DB.insertMany(response.data);
+    }
+
     console.log("Done. Weather will be tracked again in 1 minute");
   }, 60000)
 }

@@ -21,3 +21,5 @@ export type TBulkWeatherData = {
   cnt: number;
   list: TWeatherData[];
 }
+
+export type TReturnValue<T> = {data: T} | {error : {message: string, status : number}};
