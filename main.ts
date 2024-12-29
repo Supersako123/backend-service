@@ -6,14 +6,11 @@ import { fetchData } from './api/functions';
 import { TBulkWeatherData} from './lib/types';
 import { cityToString, functionLoop } from './lib/functions';
 import DB from './Services/WeatherService/WeatherServiceProvider';
+import { duration } from './config';
+import { citiesById } from './config';
 
 const key = process.env.API_KEY;
 
-const citiesById = {
-  "Las Vegas": 3606250,
-  "New York": 5128638,
-  "Washington D.C.": 4140963,
-};
 
 const cityIdstring = cityToString(citiesById);
 
@@ -35,8 +32,8 @@ function main() {
       await DB.insertMany(response.data);
     }
 
-    console.log("Done. Weather will be tracked again in 1 minute");
-  }, 60000)
+    console.log(`Done. Weather will be tracked again in ${duration}`);
+  }, duration) // 1 minute
 }
 
 main();
