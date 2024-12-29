@@ -4,4 +4,4 @@ export const citiesById = {
   "Washington D.C.": 4140963,
 };
 
-export const duration = 60000;
+export const duration = 60000; // 1 minute

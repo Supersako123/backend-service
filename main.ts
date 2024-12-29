@@ -1,6 +1,6 @@
 
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config(); 
 
 import { fetchData } from './api/functions';
 import { TBulkWeatherData} from './lib/types';
@@ -10,7 +10,6 @@ import { duration } from './config';
 import { citiesById } from './config';
 
 const key = process.env.API_KEY;
-
 
 const cityIdstring = cityToString(citiesById);
 
@@ -33,7 +32,7 @@ function main() {
     }
 
     console.log(`Done. Weather will be tracked again in ${duration}`);
-  }, duration) // 1 minute
+  }, duration) 
 }
 
 main();
