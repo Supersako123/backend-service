@@ -1,4 +1,7 @@
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 import { fetchData } from './api/functions';
 import { TBulkWeatherData} from './lib/types';
 import { cityToString, functionLoop } from './lib/functions';
