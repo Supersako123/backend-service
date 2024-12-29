@@ -22,7 +22,7 @@ function main() {
       console.log(city);
     };
 
-    const response = await fetchData<TBulkWeatherData>(`htps://api.openweathermap.org/data/2.5/group?id=${cityIdstring}&appid=${key}`);
+    const response = await fetchData<TBulkWeatherData>(`https://api.openweathermap.org/data/2.5/group?id=${cityIdstring}&appid=${key}`);
 
     if ('error' in response) {
       console.log(response.error.message)
