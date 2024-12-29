@@ -1,5 +1,6 @@
 import { TReturnValue } from "../lib/types";
 
+// Returns a promise to return either the requested data in json or an error object
 export async function fetchData<T>(url: string): Promise<TReturnValue<T>> {
 
   let response: Response;
@@ -7,8 +8,8 @@ export async function fetchData<T>(url: string): Promise<TReturnValue<T>> {
   try {
     response = await fetch(url);
   } catch (error) {
-    if (error instanceof TypeError) return { error: { message: "Type error", status: -1 } };
-    if (error instanceof SyntaxError) return { error: { message: "Syntax Error, return was not valid JSON", status: -2} };
+    if (error instanceof TypeError) return { error: { message: "Error: Type error", status: -1 } };
+    if (error instanceof SyntaxError) return { error: { message: "Error: Syntax Error, return was not valid JSON", status: -2} };
     throw error;
   }
 

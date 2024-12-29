@@ -1,6 +1,6 @@
 
 import { fetchData } from './api/functions';
-import { TBulkWeatherData, TReturnValue, TWeatherData } from './lib/types';
+import { TBulkWeatherData} from './lib/types';
 import { cityToString, functionLoop } from './lib/functions';
 import DB from './Services/WeatherService/WeatherServiceProvider';
 
@@ -12,10 +12,9 @@ const citiesById = {
   "Washington D.C.": 4140963,
 };
 
+const cityIdstring = cityToString(citiesById);
 
 function main() {
-
-  const cityIdstring = cityToString(citiesById);
 
   functionLoop(async () => {
     console.log("Tracking weather in the following cities: ");
@@ -23,7 +22,7 @@ function main() {
       console.log(city);
     };
 
-    const response = await fetchData<TBulkWeatherData>(`https://api.openweathermap.org/data/2.5/group?id=${cityIdstring}&appid=${key}`);
+    const response = await fetchData<TBulkWeatherData>(`htps://api.openweathermap.org/data/2.5/group?id=${cityIdstring}&appid=${key}`);
 
     if ('error' in response) {
       console.log(response.error.message)
